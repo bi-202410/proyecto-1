@@ -4,7 +4,7 @@
 * [Documento]()
 * [Video]()
 * [Datos Etiquetados]()
-* [Datos de entendimienot y prueba]()
+* [Datos de entendimiento y prueba]()
 
 # Integrantes
 * Andrés Arévalo Fajardo - 201923853
