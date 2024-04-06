@@ -36,7 +36,47 @@
    "outputs": [],
    "source": [
     "# import necessary libraries\n",
+    "import re\n",
+    "import string\n",
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "import matplotlib.pyplot as plt\n",
+    "\n",
+    "# import nltk\n",
+    "import nltk\n",
+    "from nltk.corpus import stopwords\n",
+    "from nltk.tokenize import word_tokenize\n",
+    "\n",
+    "# import sklearn\n",
+    "from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer\n",
+    "from sklearn.model_selection import train_test_split\n",
+    "from sklearn.linear_model import LogisticRegression\n",
+    "from sklearn.metrics import accuracy_score, classification_report, confusion_matrix\n",
+    "\n",
+    "from sklearn.metrics import (\n",
+    "    ConfusionMatrixDisplay, RocCurveDisplay,\n",
+    "    roc_auc_score, precision_score, recall_score, f1_score\n",
+    ")\n",
+    "\n",
+    "from langdetect import detect\n",
+    "\n",
+    "import unicodedata, string\n",
+    "from nltk.stem import SnowballStemmer\n",
+    "\n",
+    "\n",
+    "SEED=42"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "<<<<<<< REMOTE CELL DELETED >>>>>>>\n",
+    "# import necessary libraries\n",
     "import re, string, unicodedata\n",
+    "import string\n",
     "import numpy as np\n",
     "import pandas as pd\n",
     "import matplotlib.pyplot as plt\n",
@@ -50,17 +90,13 @@
     "# import sklearn\n",
     "from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer\n",
     "from sklearn.model_selection import train_test_split\n",
-    "from sklearn.linear_model import LogisticRegression\n",
+    "from sklearn.metrics import ConfusionMatrixDisplay, precision_score, recall_score, f1_score\n",
     "from sklearn.ensemble import RandomForestClassifier\n",
-    "from sklearn.metrics import accuracy_score, classification_report, confusion_matrix\n",
     "\n",
-    "from sklearn.metrics import (\n",
-    "    ConfusionMatrixDisplay, RocCurveDisplay,\n",
-    "    roc_auc_score, precision_score, recall_score, f1_score\n",
-    ")\n",
     "\n",
-    "from langdetect import detect\n",
-    "\n",
+    "#Balanceo de clases y variables\n",
+    "from imblearn.over_sampling import SMOTE\n",
+    "from sklearn.decomposition import PCA\n",
     "\n",
     "\n",
     "SEED=42"
@@ -119,6 +155,13 @@
    "metadata": {},
    "outputs": [
     {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "<<<<<<< local\n"
+     ]
+    },
+    {
      "data": {
       "text/html": [
        "<div>\n",
@@ -145,28 +188,103 @@
        "  </thead>\n",
        "  <tbody>\n",
        "    <tr>\n",
-       "      <th>77</th>\n",
-       "      <td>Hay varios pisos de lo mismo, te deslumbras en el primer piso con todo en oro las estatuas y demás pero los demás.pisos son la misma cosa</td>\n",
+       "      <th>275</th>\n",
+       "      <td>bonita arquitectura, linda ciudadlo malo la prostituciontours adecuadobuena tour de guiafalta restaurarla</td>\n",
        "      <td>3</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>1386</th>\n",
-       "      <td>Agua fría en la ducha, problemas con el aire acondicionado, ubicación de la recepción. Considero que no vale la pena precio vrs calidad. El personal de restaurante y bar son realmente maravillosos, no tanto los de recepción.</td>\n",
-       "      <td>1</td>\n",
+       "      <th>2071</th>\n",
+       "      <td>Es toda una experiencia estar de frente a estos animalea que se encuentran practicamente libres, es muy agradable, hay gran variedad de animales, hay una zona al final del recorrido donde se pueden observar varios animales en en habitats mas pequeños, y los espectaculos que presentan tambien son muy bueno.</td>\n",
+       "      <td>4</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>4921</th>\n",
-       "      <td>Hemos estado mi madre y mi padre en este restaurante con muchísimas ganas de visitarlo, yo venía de visita a Cuba desde España y ya venía planificando con tiempo la visita a esta paladar, me hacía muchísima ilusión, pues al entrar nos atendió un chico...Más</td>\n",
-       "      <td>1</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>233</th>\n",
-       "      <td>Como siempre muy bien,es un edificio magnífico,en perfectas condiciones,su escalinata es clásica.</td>\n",
+       "      <th>683</th>\n",
+       "      <td>Primera vez en Vallarta, los shows street neon y concierto de rock excelentes además me encantaron las actividades con los chicos de animación: Israel, Bryan,Aldair, Iris,Fede, Liz, Canelo, Alex, Chuy y Mawy.\\nRecalcó el excelente servicio de los restaurantes el que más me gustó fue el Ipanema buen servicio de meseros, volveremos seguramente</td>\n",
        "      <td>5</td>\n",
        "    </tr>\n",
        "    <tr>\n",
-       "      <th>4935</th>\n",
-       "      <td>Que puedo decir?. Todos los adjetivos posibles han sido escritos para referirse a esta bella ciudad. Cada día mas prospera, bellamente restaurada y aun siguen restaurando los bellos edificios para convertirlos en pequeños hoteles de lujo de ensueño para todos los gustos y bolsillos, almacenes, restaurantes o casa particulares. Por la noche la escenografía cambia, haciéndola extremadamente romántica. Simplemente es una ciudad que tiene magia.</td>\n",
+       "      <th>44</th>\n",
+       "      <td>Al ser un edificio de construcción redonda el ruido del lobby se escucha en todas las habitaciones.   El personal de recepción no atiende a llamado la para solucionar temas graves   No recomiendo este hotel</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>235</th>\n",
+       "      <td>Muy austero, la comida no sabe bien, alejado de buenos lugares para comer, ubicado en una zona donde el acceso es muy complicado después de las 10pm debido a construcciones de un puente, el restaurante bar agrega sin permiso la propina en el recibo. El elevador se descompuso y no había escaleras para subir a los cuartos.</td>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                                                                                                                                                                                                                                                                                                                                                       Review  Class\n",
+       "275                                                                                                                                                                                                                                                 bonita arquitectura, linda ciudadlo malo la prostituciontours adecuadobuena tour de guiafalta restaurarla      3\n",
+       "2071                                      Es toda una experiencia estar de frente a estos animalea que se encuentran practicamente libres, es muy agradable, hay gran variedad de animales, hay una zona al final del recorrido donde se pueden observar varios animales en en habitats mas pequeños, y los espectaculos que presentan tambien son muy bueno.      4\n",
+       "683   Primera vez en Vallarta, los shows street neon y concierto de rock excelentes además me encantaron las actividades con los chicos de animación: Israel, Bryan,Aldair, Iris,Fede, Liz, Canelo, Alex, Chuy y Mawy.\\nRecalcó el excelente servicio de los restaurantes el que más me gustó fue el Ipanema buen servicio de meseros, volveremos seguramente      5\n",
+       "44                                                                                                                                             Al ser un edificio de construcción redonda el ruido del lobby se escucha en todas las habitaciones.   El personal de recepción no atiende a llamado la para solucionar temas graves   No recomiendo este hotel      1\n",
+       "235                        Muy austero, la comida no sabe bien, alejado de buenos lugares para comer, ubicado en una zona donde el acceso es muy complicado después de las 10pm debido a construcciones de un puente, el restaurante bar agrega sin permiso la propina en el recibo. El elevador se descompuso y no había escaleras para subir a los cuartos.      2"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "=======\n"
+     ]
+    },
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Review</th>\n",
+       "      <th>Class</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>1701</th>\n",
+       "      <td>Viajamos con mi esposa, la estadía espectacular, el personal muy atento comandado por Gilberto, un administrador que mantiene todo a punto. Volveremos a la mayor brevedad. Recomendado para el descanso</td>\n",
+       "      <td>5</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5485</th>\n",
+       "      <td>Tenía muchas expectativas de visitar el museo. La verdad, qué gran decepción. La museografía me pareció terrible. La iluminación de las piezas muy mal diseñada y los textos puestos en las vitrinas son ilegibles ya que están presentados a una altura muy baja, obligando al visitante a agacharse por completo. Mucho edificio y poco contenido. Eso sí, una placa gigantesca a la entrada conmemorando al  encargado de haber inaugurado el “magno” edificio.</td>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3238</th>\n",
+       "      <td>Una vez pasado el concepto de una mexicana-restaurante libanés Eddie es un montón de diversión. Lugar local cerca de Paradise Village, con asientos en su mayoría al aire libre. Es muy popular, pero incluso sin reserva sólo teníamos una mínima esperar. Muy buena margarita's. Hay música en vivo y Eddie es un anfitrión sociable. Él también era que ofrece el mejor dollar a la conversión de pesos que hemos encontrado. También está abierto para el desayuno y el almuerzo. Wifi gratuito. Recomendar</td>\n",
+       "      <td>4</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>623</th>\n",
+       "      <td>Muy bonita la instalación y parque aledaño a la rueda de la fortuna, muy buen precio ($30 por persona), el servicio de la gente que tiende es muy bueno, la góndola muy bonita, solo que te subes y no ves nada mas que techos de centros comerciales y una avenida. Cholula se ve lejisimos y el centro también.</td>\n",
+       "      <td>3</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>7287</th>\n",
+       "      <td>La vista desde Monserrate fue espectacular. Nos tomamos el teleférico que te permite vistas de la ciudad desde elevaciones diferentes. Fue una experiencia increíble.</td>\n",
        "      <td>5</td>\n",
        "    </tr>\n",
        "  </tbody>\n",
@@ -174,17 +292,24 @@
        "</div>"
       ],
       "text/plain": [
-       "                                                                                                                                                                                                                                                                                                                                                                                                                                                             Review  Class\n",
-       "77                                                                                                                                                                                                                                                                                                                       Hay varios pisos de lo mismo, te deslumbras en el primer piso con todo en oro las estatuas y demás pero los demás.pisos son la misma cosa       3\n",
-       "1386                                                                                                                                                                                                                               Agua fría en la ducha, problemas con el aire acondicionado, ubicación de la recepción. Considero que no vale la pena precio vrs calidad. El personal de restaurante y bar son realmente maravillosos, no tanto los de recepción.      1\n",
-       "4921                                                                                                                                                                                              Hemos estado mi madre y mi padre en este restaurante con muchísimas ganas de visitarlo, yo venía de visita a Cuba desde España y ya venía planificando con tiempo la visita a esta paladar, me hacía muchísima ilusión, pues al entrar nos atendió un chico...Más      1\n",
-       "233                                                                                                                                                                                                                                                                                                                                                               Como siempre muy bien,es un edificio magnífico,en perfectas condiciones,su escalinata es clásica.      5\n",
-       "4935  Que puedo decir?. Todos los adjetivos posibles han sido escritos para referirse a esta bella ciudad. Cada día mas prospera, bellamente restaurada y aun siguen restaurando los bellos edificios para convertirlos en pequeños hoteles de lujo de ensueño para todos los gustos y bolsillos, almacenes, restaurantes o casa particulares. Por la noche la escenografía cambia, haciéndola extremadamente romántica. Simplemente es una ciudad que tiene magia.      5"
+       "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               Review  Class\n",
+       "1701                                                                                                                                                                                                                                                                                                         Viajamos con mi esposa, la estadía espectacular, el personal muy atento comandado por Gilberto, un administrador que mantiene todo a punto. Volveremos a la mayor brevedad. Recomendado para el descanso      5\n",
+       "5485                                               Tenía muchas expectativas de visitar el museo. La verdad, qué gran decepción. La museografía me pareció terrible. La iluminación de las piezas muy mal diseñada y los textos puestos en las vitrinas son ilegibles ya que están presentados a una altura muy baja, obligando al visitante a agacharse por completo. Mucho edificio y poco contenido. Eso sí, una placa gigantesca a la entrada conmemorando al  encargado de haber inaugurado el “magno” edificio.      2\n",
+       "3238  Una vez pasado el concepto de una mexicana-restaurante libanés Eddie es un montón de diversión. Lugar local cerca de Paradise Village, con asientos en su mayoría al aire libre. Es muy popular, pero incluso sin reserva sólo teníamos una mínima esperar. Muy buena margarita's. Hay música en vivo y Eddie es un anfitrión sociable. Él también era que ofrece el mejor dollar a la conversión de pesos que hemos encontrado. También está abierto para el desayuno y el almuerzo. Wifi gratuito. Recomendar      4\n",
+       "623                                                                                                                                                                                                 Muy bonita la instalación y parque aledaño a la rueda de la fortuna, muy buen precio ($30 por persona), el servicio de la gente que tiende es muy bueno, la góndola muy bonita, solo que te subes y no ves nada mas que techos de centros comerciales y una avenida. Cholula se ve lejisimos y el centro también.      3\n",
+       "7287                                                                                                                                                                                                                                                                                                                                            La vista desde Monserrate fue espectacular. Nos tomamos el teleférico que te permite vistas de la ciudad desde elevaciones diferentes. Fue una experiencia increíble.      5"
       ]
      },
-     "execution_count": 5,
+     "execution_count": 454,
      "metadata": {},
      "output_type": "execute_result"
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      ">>>>>>> remote\n"
+     ]
     }
    ],
    "source": [
@@ -533,10 +658,45 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
+      "<<<<<<< local <modified: >\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
       "[nltk_data] Downloading package stopwords to\n",
+      "[nltk_data]     /Users/andresarevalo/nltk_data...\n",
       "[nltk_data]   Package stopwords is already up-to-date!\n",
       "[nltk_data] Downloading package punkt to\n",
+      "[nltk_data]     /Users/andresarevalo/nltk_data...\n",
       "[nltk_data]   Package punkt is already up-to-date!\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "=======\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "[nltk_data] Downloading package stopwords to\n",
+      "[nltk_data]     /Users/marianaforero/nltk_data...\n",
+      "[nltk_data]   Package stopwords is already up-to-date!\n",
+      "[nltk_data] Downloading package punkt to\n",
+      "[nltk_data]     /Users/marianaforero/nltk_data...\n",
+      "[nltk_data]   Package punkt is already up-to-date!\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      ">>>>>>> remote <modified: >\n"
      ]
     },
     {
@@ -604,6 +764,44 @@
   },
   {
    "cell_type": "code",
+   "execution_count": 631,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "<<<<<<< LOCAL CELL DELETED >>>>>>>\n",
+    "def tokenize_text(text):\n",
+    "    # convertir a minúsculas\n",
+    "    text = text.lower()\n",
+    "    \n",
+    "    # eliminar caracteres numericos\n",
+    "    text = re.sub(r'\\d+', '', text) \n",
+    "\n",
+    "    # eliminar puntuación\n",
+    "    text = text.translate(str.maketrans('', '', string.punctuation))\n",
+    "    \n",
+    "    # eliminar caracters especiales\n",
+    "    emoji_pattern = re.compile(\"[\"\n",
+    "                               u\"\\U0001F600-\\U0001F64F\"  # emoticons TODO: not all emojis included here\n",
+    "                               u\"\\U0001F300-\\U0001F5FF\"  # symbols & pictographs\n",
+    "                               \"]+\", flags=re.UNICODE)\n",
+    "    \n",
+    "    text = emoji_pattern.sub(r'', text)\n",
+    "\n",
+    "    text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('utf-8', 'ignore')  \n",
+    "     \n",
+    "    tokens = word_tokenize(text)\n",
+    "\n",
+    "    # eliminar las stopwords\n",
+    "    tokens = [t for t in tokens if t not in stop_words]\n",
+    "\n",
+    "    # eliminar los stems de las palabras\n",
+    "    stemmer = SnowballStemmer('spanish')\n",
+    "    tokens = [stemmer.stem(t) for t in tokens]\n",
+    "    return tokens"
+   ]
+  },
+  {
+   "cell_type": "code",
    "execution_count": null,
    "metadata": {},
    "outputs": [],
@@ -621,12 +819,60 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
+      "<<<<<<< local\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
       "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/sklearn/feature_extraction/text.py:525: UserWarning: The parameter 'token_pattern' will not be used since 'tokenizer' is not None'\n",
       "  warnings.warn(\n",
       "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/sklearn/feature_extraction/text.py:408: UserWarning: Your stop_words may be inconsistent with your preprocessing. Tokenizing the stop words generated tokens ['eram', 'estab', 'estais', 'estan', 'estareis', 'estari', 'estariais', 'esteis', 'esten', 'estes', 'estuvier', 'estuvies', 'fuer', 'fues', 'habeis', 'habi', 'habiais', 'habr', 'habreis', 'habri', 'habriais', 'hayais', 'hubier', 'hubies', 'mas', 'mia', 'mias', 'mio', 'mios', 'seais', 'ser', 'sereis', 'seri', 'seriais', 'si', 'tambi', 'tendr', 'tendreis', 'tendri', 'tendriais', 'teneis', 'tengais', 'teni', 'teniais', 'tuvier', 'tuvies'] not in stop_words.\n",
-      "  warnings.warn(\n",
-      "/opt/homebrew/lib/python3.11/site-packages/sklearn/feature_extraction/text.py:525: UserWarning: The parameter 'token_pattern' will not be used since 'tokenizer' is not None'\n",
       "  warnings.warn(\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "=======\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      ">>>>>>> remote\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "<<<<<<< local <removed>\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "=======\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "/Users/marianaforero/anaconda3/lib/python3.11/site-packages/sklearn/feature_extraction/text.py:525: UserWarning: The parameter 'token_pattern' will not be used since 'tokenizer' is not None'\n",
+      "  warnings.warn(\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      ">>>>>>> remote <modified: >\n"
      ]
     }
    ],
@@ -640,14 +886,45 @@
    "metadata": {},
    "outputs": [
     {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "<<<<<<< local <modified: text/plain>\n"
+     ]
+    },
+    {
      "data": {
       "text/plain": [
-       "24863"
+       "13475"
       ]
      },
-     "execution_count": null,
+     "execution_count": 20,
      "metadata": {},
      "output_type": "execute_result"
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "=======\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "12582"
+      ]
+     },
+     "execution_count": 420,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      ">>>>>>> remote <modified: text/plain>\n"
+     ]
     }
    ],
    "source": [
@@ -669,14 +946,45 @@
    "metadata": {},
    "outputs": [
     {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "<<<<<<< local <modified: text/plain>\n"
+     ]
+    },
+    {
      "data": {
       "text/plain": [
-       "24863"
+       "13475"
       ]
      },
-     "execution_count": null,
+     "execution_count": 22,
      "metadata": {},
      "output_type": "execute_result"
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "=======\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "12516"
+      ]
+     },
+     "execution_count": 246,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      ">>>>>>> remote <modified: text/plain>\n"
+     ]
     }
    ],
    "source": [
@@ -1035,6 +1343,13 @@
    "metadata": {},
    "outputs": [
     {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "<<<<<<< local\n"
+     ]
+    },
+    {
      "data": {
       "text/html": [
        "<div>\n",
@@ -1055,27 +1370,27 @@
        "  <thead>\n",
        "    <tr style=\"text-align: right;\">\n",
        "      <th></th>\n",
+       "      <th>...</th>\n",
+       "      <th>......</th>\n",
+       "      <th>8</th>\n",
        "      <th>aa</th>\n",
        "      <th>aaaaa</th>\n",
-       "      <th>aaaahed</th>\n",
-       "      <th>aasequible</th>\n",
+       "      <th>aaaah</th>\n",
+       "      <th>aasequ</th>\n",
        "      <th>ab</th>\n",
        "      <th>abad</th>\n",
-       "      <th>abajo</th>\n",
-       "      <th>abajolo</th>\n",
-       "      <th>abajomás</th>\n",
-       "      <th>abalanzan</th>\n",
+       "      <th>abaj</th>\n",
        "      <th>...</th>\n",
-       "      <th>❤</th>\n",
-       "      <th>❤️</th>\n",
-       "      <th>➕</th>\n",
-       "      <th>️</th>\n",
-       "      <th>🇨🇴</th>\n",
-       "      <th>🇺🇾</th>\n",
-       "      <th>🛌🛋</th>\n",
-       "      <th>🤤</th>\n",
-       "      <th>🤪</th>\n",
-       "      <th>🤪🤣</th>\n",
+       "      <th>zonatambi</th>\n",
+       "      <th>zoo</th>\n",
+       "      <th>zoofari</th>\n",
+       "      <th>zoolog</th>\n",
+       "      <th>zorr</th>\n",
+       "      <th>zotan</th>\n",
+       "      <th>zuegly</th>\n",
+       "      <th>zul</th>\n",
+       "      <th>zum</th>\n",
+       "      <th>zumb</th>\n",
        "    </tr>\n",
        "  </thead>\n",
        "  <tbody>\n",
@@ -1273,7 +1588,7 @@
        "    </tr>\n",
        "    <tr>\n",
        "      <th>6240</th>\n",
-       "      <td>0</td>\n",
+       "      <td>1</td>\n",
        "      <td>0</td>\n",
        "      <td>0</td>\n",
        "      <td>0</td>\n",
@@ -1345,29 +1660,378 @@
        "    </tr>\n",
        "  </tbody>\n",
        "</table>\n",
-       "<p>6243 rows × 24863 columns</p>\n",
+       "<p>6243 rows × 13475 columns</p>\n",
        "</div>"
       ],
       "text/plain": [
-       "      aa  aaaaa  aaaahed  aasequible  ab  abad  abajo  abajolo  abajomás  abalanzan  ...  ❤  ❤️  ➕  ️  🇨🇴  🇺🇾  🛌🛋  🤤  🤪  🤪🤣\n",
-       "0      0      0        0           0   0     0      0        0         0          0  ...  0   0  0  0   0   0   0  0  0   0\n",
-       "1      0      0        0           0   0     0      0        0         0          0  ...  0   0  0  0   0   0   0  0  0   0\n",
-       "2      0      0        0           0   0     0      0        0         0          0  ...  0   0  0  0   0   0   0  0  0   0\n",
-       "3      0      0        0           0   0     0      0        0         0          0  ...  0   0  0  0   0   0   0  0  0   0\n",
-       "4      0      0        0           0   0     0      0        0         0          0  ...  0   0  0  0   0   0   0  0  0   0\n",
-       "...   ..    ...      ...         ...  ..   ...    ...      ...       ...        ...  ... ..  .. .. ..  ..  ..  .. .. ..  ..\n",
-       "6238   0      0        0           0   0     0      0        0         0          0  ...  0   0  0  0   0   0   0  0  0   0\n",
-       "6239   0      0        0           0   0     0      0        0         0          0  ...  0   0  0  0   0   0   0  0  0   0\n",
-       "6240   0      0        0           0   0     0      0        0         0          0  ...  0   0  0  0   0   0   0  0  0   0\n",
-       "6241   0      0        0           0   0     0      0        0         0          0  ...  0   0  0  0   0   0   0  0  0   0\n",
-       "6242   0      0        0           0   0     0      0        0         0          0  ...  0   0  0  0   0   0   0  0  0   0\n",
+       "      ...  ......  8  aa  aaaaa  aaaah  aasequ  ab  abad  abaj  ...  zonatambi  zoo  zoofari  zoolog  zorr  zotan  zuegly  zul  zum  zumb\n",
+       "0       0       0  0   0      0      0       0   0     0     0  ...          0    0        0       0     0      0       0    0    0     0\n",
+       "1       0       0  0   0      0      0       0   0     0     0  ...          0    0        0       0     0      0       0    0    0     0\n",
+       "2       0       0  0   0      0      0       0   0     0     0  ...          0    0        0       0     0      0       0    0    0     0\n",
+       "3       0       0  0   0      0      0       0   0     0     0  ...          0    0        0       0     0      0       0    0    0     0\n",
+       "4       0       0  0   0      0      0       0   0     0     0  ...          0    0        0       0     0      0       0    0    0     0\n",
+       "...   ...     ... ..  ..    ...    ...     ...  ..   ...   ...  ...        ...  ...      ...     ...   ...    ...     ...  ...  ...   ...\n",
+       "6238    0       0  0   0      0      0       0   0     0     0  ...          0    0        0       0     0      0       0    0    0     0\n",
+       "6239    0       0  0   0      0      0       0   0     0     0  ...          0    0        0       0     0      0       0    0    0     0\n",
+       "6240    1       0  0   0      0      0       0   0     0     0  ...          0    0        0       0     0      0       0    0    0     0\n",
+       "6241    0       0  0   0      0      0       0   0     0     0  ...          0    0        0       0     0      0       0    0    0     0\n",
+       "6242    0       0  0   0      0      0       0   0     0     0  ...          0    0        0       0     0      0       0    0    0     0\n",
        "\n",
-       "[6243 rows x 24863 columns]"
+       "[6243 rows x 13475 columns]"
       ]
      },
-     "execution_count": 37,
+     "execution_count": 23,
      "metadata": {},
      "output_type": "execute_result"
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "=======\n"
+     ]
+    },
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>...</th>\n",
+       "      <th>......</th>\n",
+       "      <th>8</th>\n",
+       "      <th>aa</th>\n",
+       "      <th>aaaaa</th>\n",
+       "      <th>aaaah</th>\n",
+       "      <th>ab</th>\n",
+       "      <th>abad</th>\n",
+       "      <th>abaj</th>\n",
+       "      <th>abajol</th>\n",
+       "      <th>...</th>\n",
+       "      <th>zonassi</th>\n",
+       "      <th>zoo</th>\n",
+       "      <th>zoofari</th>\n",
+       "      <th>zoolog</th>\n",
+       "      <th>zorr</th>\n",
+       "      <th>zotan</th>\n",
+       "      <th>zuegly</th>\n",
+       "      <th>zul</th>\n",
+       "      <th>zum</th>\n",
+       "      <th>zumb</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>...</th>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5453</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5454</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5455</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5456</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5457</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>5458 rows × 12583 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "      ...  ......    8   aa  aaaaa  aaaah   ab  abad  abaj  abajol  ...  zonassi  zoo  zoofari  zoolog  zorr  zotan  zuegly  zul  zum  zumb\n",
+       "0     0.0     0.0  0.0  0.0    0.0    0.0  0.0   0.0   0.0     0.0  ...      0.0  0.0      0.0     0.0   0.0    0.0     0.0  0.0  0.0   0.0\n",
+       "1     0.0     0.0  0.0  0.0    0.0    0.0  0.0   0.0   0.0     0.0  ...      0.0  0.0      0.0     0.0   0.0    0.0     0.0  0.0  0.0   0.0\n",
+       "2     0.0     0.0  0.0  0.0    0.0    0.0  0.0   0.0   0.0     0.0  ...      0.0  0.0      0.0     0.0   0.0    0.0     0.0  0.0  0.0   0.0\n",
+       "3     0.0     0.0  0.0  0.0    0.0    0.0  0.0   0.0   0.0     0.0  ...      0.0  0.0      0.0     0.0   0.0    0.0     0.0  0.0  0.0   0.0\n",
+       "4     0.0     0.0  0.0  0.0    0.0    0.0  0.0   0.0   0.0     0.0  ...      0.0  0.0      0.0     0.0   0.0    0.0     0.0  0.0  0.0   0.0\n",
+       "...   ...     ...  ...  ...    ...    ...  ...   ...   ...     ...  ...      ...  ...      ...     ...   ...    ...     ...  ...  ...   ...\n",
+       "5453  0.0     0.0  0.0  0.0    0.0    0.0  0.0   0.0   0.0     0.0  ...      0.0  0.0      0.0     0.0   0.0    0.0     0.0  0.0  0.0   0.0\n",
+       "5454  0.0     0.0  0.0  0.0    0.0    0.0  0.0   0.0   0.0     0.0  ...      0.0  0.0      0.0     0.0   0.0    0.0     0.0  0.0  0.0   0.0\n",
+       "5455  0.0     0.0  0.0  0.0    0.0    0.0  0.0   0.0   0.0     0.0  ...      0.0  0.0      0.0     0.0   0.0    0.0     0.0  0.0  0.0   0.0\n",
+       "5456  0.0     0.0  0.0  0.0    0.0    0.0  0.0   0.0   0.0     0.0  ...      0.0  0.0      0.0     0.0   0.0    0.0     0.0  0.0  0.0   0.0\n",
+       "5457  0.0     0.0  0.0  0.0    0.0    0.0  0.0   0.0   0.0     0.0  ...      0.0  0.0      0.0     0.0   0.0    0.0     0.0  0.0  0.0   0.0\n",
+       "\n",
+       "[5458 rows x 12583 columns]"
+      ]
+     },
+     "execution_count": 589,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      ">>>>>>> remote\n"
+     ]
     }
    ],
    "source": [
@@ -1673,6 +2337,14 @@
    "metadata": {},
    "source": [
     "# Entrenamiento y evaluación de modelos"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1038f314",
+   "metadata": {},
+   "source": [
+    "<span style=\"color:red\"><b><<<<<<< local</b></span>"
    ]
   },
   {
@@ -4039,6 +4711,14 @@
   },
   {
    "cell_type": "markdown",
+   "id": "b2039942",
+   "metadata": {},
+   "source": [
+    "<span style=\"color:red\"><b>=======</b></span>"
+   ]
+  },
+  {
+   "cell_type": "markdown",
    "metadata": {},
    "source": [
     "## Regresion Logistica\n",
@@ -4536,6 +5216,14 @@
    "metadata": {},
    "source": [
     "La matriz de confusion mustra que hay una mejora ya que la concentracion en las 3 diagonales del centro en mucho mayor a la matriz anterior"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "0343e514",
+   "metadata": {},
+   "source": [
+    "<span style=\"color:red\"><b>>>>>>>> remote</b></span>"
    ]
   },
   {
