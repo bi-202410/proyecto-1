@@ -10,9 +10,9 @@ class DataModel(BaseModel):
         return ["review"]
 
 
-class Model(BaseModel):
+class TrainModel(BaseModel):
     review: str
-    _class: int # todo: review if this works, data columns are "review" and "class" but the model is expecting "review" and "_class"
+    class_: int
 
     def columns(self):
         """
