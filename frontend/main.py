@@ -25,7 +25,7 @@ def predict():
     review = request.form['review']
 
     endpoint = f'{BACKEND_URL}/predict'
-    response = requests.post(endpoint, json={'review': review})
+    response = requests.post(endpoint, json=[{'review': review}])
 
     prediction = response.json()
     return render_template('index.html', prediction=prediction)
