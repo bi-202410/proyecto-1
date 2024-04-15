@@ -4,7 +4,7 @@ from pandas import DataFrame
 class Model:
 
     def __init__(self):
-        self.model = load("assets/model.joblib")
+        self.model = load("assets/pipeline.joblib")
 
     def make_predictions(self, data: DataFrame):
         print(f"[INFO] Predicting {data.shape[0]} samples")
@@ -14,7 +14,7 @@ class Model:
             print(f"[ERROR] Error while making predictions: {e}")
             raise e
         return result
-    
+
     def retrain(self, data: DataFrame):
         print(f"[INFO] Retraining model based on {data.shape[0]} samples")
         try:
