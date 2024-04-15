@@ -15,11 +15,11 @@ def read_root():
    return {"Hello": "World"}
 
 @app.post("/predict")
-def make_predictions(data: DataModel):
+def make_predictions(data: DataModelArray):
     """
     @param data: DataModel representa una instancia de datos a predecir
     """
-    raw_data = DataFrame(data.model_dump(), columns=data.columns())
+    raw_data = DataFrame([item.model_dump() for item in data], columns=data[0].columns())
     model = Model()
     try:
         prediction = model.make_predictions(raw_data)
