@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-
+from typing import List
 class DataModel(BaseModel):
     review: str
     def columns(self):
@@ -17,4 +17,4 @@ class TrainModel(BaseModel):
         return ["review","class_"]
 class PredictionResult(BaseModel):
     review: str
-    prediction: int
+    prediction: List

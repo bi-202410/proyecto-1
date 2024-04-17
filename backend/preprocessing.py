@@ -9,6 +9,7 @@ nltk.download('stopwords')
 nltk.download('punkt')
 
 import sklearn
+import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
@@ -47,8 +48,8 @@ def get_top_features(pipeline):
     model = pipeline.named_steps['model']
     coefficients = model.coef_
 
-    # Inicializar la lista de palabras más importantes por score
-    top_words_by_score = []
+    # Inicializar el diccionario de palabras más importantes por score
+    top_words_by_score = {}
 
     # Obtener las palabras más influyentes para cada score
     for i, score_coefficients in enumerate(coefficients):
@@ -56,7 +57,7 @@ def get_top_features(pipeline):
         top_indices = sorted_indices[-10:]  # Obtener los índices de las 10 palabras principales
         top_indices = top_indices[::-1]  # Invertir para obtener las palabras con los coeficientes más altos primero
         top_words = [feature_names[idx] for idx in top_indices]
-        top_words_by_score.append(top_words)
+        top_words_by_score[i] = top_words
 
     return top_words_by_score
 
@@ -79,13 +80,18 @@ def train_evaluate_pipeline(pipeline, X_train, X_test, y_train, y_test):
     test_recall = recall_score(y_test, y_test_pred, average='weighted')
     test_f1 = f1_score(y_test, y_test_pred, average='weighted')
 
+    features = get_top_features(pipeline)
+    print(features)
     # Devolver las métricas de evaluación
     return {
-        'Train Accuracy': train_accuracy,
-        'Train Recall (Weighted)': train_recall,
-        'Train F1-Score (Weighted)': train_f1,
-        'Test Accuracy': test_accuracy,
-        'Test Recall (Weighted)': test_recall,
-        'Test F1-Score (Weighted)': test_f1
+        'stats': {
+            'train_accuray': train_accuracy,
+            'train_recall': train_recall,
+            'train_fscore': train_f1,
+            'test_accuray': test_accuracy,
+            'test_recall': test_recall,
+            'test_fscore': test_f1,
+        },
+        'features': features
     }
 

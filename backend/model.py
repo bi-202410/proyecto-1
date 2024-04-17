@@ -43,9 +43,11 @@ class Model:
         for index, row in data.iterrows():
             review = row["review"]
             try:
-                prediction = self.model.predict([review])
+                probs = self.model.predict_proba([review])
+                prediction = [list(prob) for prob in probs]
+                #print sum
+                print(np.sum(probs))
                 prediction_result = PredictionResult(review=review, prediction=prediction)
-                print(prediction_result)
                 predictions.append(prediction_result)
             except Exception as e:
                 print(f"[ERROR] Error while making predictions: {e}")
