@@ -62,7 +62,7 @@ def retrain():
     print(model_results)
 
     # Render the HTML template with the prediction
-    # return render_template('train.html', model_results=model_results)
+    return render_template('train.html', model_results=str(model_results))
 
 if __name__ == '__main__':
     app.run(debug=True)
