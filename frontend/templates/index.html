@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <title>Calificación de reseñas</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <header>
+      <h1>Calificación de reseñas de sitios turísticos</h1>
+      <ul>
+        <li><a href="/">Predecir</a></li>
+        <li><a href="/train">Entrenar</a></li>
+    </header>
+    <main>
+      <p>DESCRIPCION</p>
+      <form action="/predict" method="POST" enctype="multipart/form-data">
+        <label for="review">Reseña:</label>
+        <textarea id="review" name="review" rows="10" cols="50"></textarea>
+        <br>
+        <input type="submit" value="Predecir">
+        {% if prediction %}
+        <div class="prediction">
+          <p>Esta reseña corresponde a una clasificación de: {{ prediction }}</p>
+        </div>
+        {% endif %}
+      </form>
+    </main>
+  </body>
+</html>
