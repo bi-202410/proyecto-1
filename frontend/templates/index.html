@@ -18,8 +18,12 @@
         <textarea id="review" name="review" rows="10" cols="50"></textarea>
         <br>
         <input type="submit" value="Predecir">
-        {% if prediction %}
+
+        {% if prediction%}
         <div class="prediction">
+          {% if review %}
+            <p>Reseña: <q>{{ review }}</q></p>
+          {% endif %}
           <p>Esta reseña corresponde a una clasificación de: {{ prediction }}</p>
         </div>
         {% endif %}
