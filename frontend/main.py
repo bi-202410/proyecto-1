@@ -23,12 +23,13 @@ def index():
 @app.route('/predict', methods=['POST'])
 def predict():
     review = request.form['review']
-
     endpoint = f'{BACKEND_URL}/predict'
     response = requests.post(endpoint, json=[{'review': review}])
-
     prediction = response.json()
-    return render_template('index.html', prediction=prediction)
+    review = prediction[0]['review']
+    pred_num = prediction[0]['prediction']
+
+    return render_template('index.html', prediction=pred_num, review=review)
 
 
 @app.route('/train')
@@ -58,8 +59,10 @@ def retrain():
     # Parse the prediction from the API response
     model_results = response.json()
 
+    print(model_results)
+
     # Render the HTML template with the prediction
-    return render_template('train.html', model_results=model_results)
+    return render_template('train.html', model_results=str(model_results))
 
 if __name__ == '__main__':
     app.run(debug=True)
