@@ -48,26 +48,51 @@ def retrain():
     endpoint = f'{BACKEND_URL}/retrain'
 
     if 'train_data' not in request.files:
-        return 'No file part'
+        return render_template('train.html', error='No se ha seleccionado un archivo')
     file = request.files['train_data']
     if file.filename == '':
-        return 'No selected file'
+        return render_template('train.html', error='No se encontró el archivo.')
     if not allowed_file(file.filename):
-        return 'Invalid file type'
+        return render_template('train.html', error='El archivo no es un CSV.')
 
     file_df = pd.read_csv(file, encoding='latin1')
+
+    if 'Class' not in file_df.columns or 'Review' not in file_df.columns:
+        return render_template('train.html', error='El archivo no tiene las columnas requeridas, por favor, revise el formato.')
+
     file_df.rename(columns={'Class': 'class_', 'Review': 'review'}, inplace=True)
     payload = file_df.to_dict(orient='records')
     print(payload)
+    
     response = requests.post(endpoint, json=payload)
 
     # Parse the prediction from the API response
-    model_results = response.json()
+    model_results = response.json()[0]
+    test_accuray = model_results['stats']['test_accuray']
+    test_recall = model_results['stats']['test_recall']
 
-    print(model_results)
+    stats = {
+        'test_accuray': f"{test_accuray:.2%}",
+        'test_recall': f"{test_recall:.2%}"
+    }
+
+    features = model_results['features']
+    class_1 = features.get('0', [])
+    class_2 = features.get('1', [])
+    class_3 = features.get('2', [])
+    class_4 = features.get('3', [])
+    class_5 = features.get('4', [])
+
+    features = {
+        'class_0': '-'.join([f'"{item}"' for item in class_1]),
+        'class_1': '-'.join([f'"{item}"' for item in class_2]),
+        'class_2': '-'.join([f'"{item}"' for item in class_3]),
+        'class_3': '-'.join([f'"{item}"' for item in class_4]),
+        'class_4': '-'.join([f'"{item}"' for item in class_5])
+    }
 
     # Render the HTML template with the prediction
-    return render_template('train.html', model_results=str(model_results))
+    return render_template('train.html', model_results=features, stats=stats)
 
 if __name__ == '__main__':
     app.run(debug=True)

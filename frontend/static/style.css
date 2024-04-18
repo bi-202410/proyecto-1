@@ -8,7 +8,8 @@
   --font-secondary: 'Podkova', sans-serif;
 }
 
-html, body {
+html,
+body {
   padding: 0;
   margin: 0;
   height: 100%;
@@ -42,11 +43,11 @@ ul {
   background-color: var(--color-primary);
 }
 
-ul > li {
+ul>li {
   float: left;
 }
 
-ul > li a {
+ul>li a {
   display: block;
   color: white;
   text-align: center;
@@ -55,7 +56,7 @@ ul > li a {
 }
 
 /* Change the link color to #111 (black) on hover */
-ul > li a:hover {
+ul>li a:hover {
   background-color: #111;
 }
 
@@ -63,7 +64,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-
+  margin: 0% 10% 5% 10%
 }
 
 /* Form */
@@ -85,7 +86,7 @@ form {
   margin-top: 1rem;
 }
 
-#file-chosen{
+#file-chosen {
   margin-top: 0.3rem;
   font-family: sans-serif;
 }
@@ -154,29 +155,33 @@ main p {
   margin-bottom: 5px;
 }
 
-.prediction table{
+.prediction table {
   border-collapse: collapse;
   width: 100%;
 }
-.prediction td,th{
+
+.prediction td,
+th {
   padding: 10px;
   border: 1px solid #000;
 }
-.prediction td{
+
+.prediction td {
   border-top: none;
 }
-.prediction th{
-  border-bottom:  none;
+
+.prediction th {
+  border-bottom: none;
 }
 
-.prediction table p{
+.prediction table p {
   margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.prediction-cell{
+.prediction-cell {
   background: #000;
   color: #fff;
   margin-right: 10px;
@@ -187,3 +192,95 @@ main p {
   color: #fff;
 }
 
+
+div.error {
+  color: red;
+  font-size: 16px;
+  margin-top: 16px;
+}
+
+.results {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  grid-template-rows: repeat(5, 1fr);
+  grid-column-gap: 5%;
+  font-family: var(--font-secondary);
+  text-align: center;
+}
+
+.div1 {
+  grid-area: 1 / 1 / 6 / 2;
+}
+
+.div2 {
+  grid-area: 1 / 2 / 2 / 3;
+}
+
+.div3 {
+  grid-area: 2 / 2 / 3 / 3;
+}
+
+.div4 {
+  grid-area: 3 / 2 / 4 / 3;
+}
+
+.div5 {
+  grid-area: 4 / 2 / 5 / 3;
+}
+
+.div6 {
+  grid-area: 5 / 2 / 6 / 3;
+}
+
+.words-div {
+  text-align: left;
+}
+
+.words {
+  display: block;
+  justify-content: center;
+  align-items: center;
+}
+
+.cls-num {
+  /* font-size: larger; */
+  display: inline-block;
+  /* Ensures the span takes only the space it needs */
+  padding: 5px 10px;
+  /* Adjust padding as needed */
+  border-radius: 20px;
+  /* Adjust the border-radius to make the corners rounded */
+  border: 2px solid #000;
+  /* Define border properties */
+  text-align: center;
+  /* Center-align text within the span */
+  color: white;
+}
+
+.explanation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: left;
+  margin-bottom: 5px;
+}
+
+.cls_1 {
+  background-color: #FF7272;
+}
+
+.cls_2 {
+  background-color: #C18465;
+}
+
+.cls_3 {
+  background-color: #849559;
+}
+
+.cls_4 {
+  background-color: #46A74C;
+}
+
+.cls_5 {
+  background-color: #08B83F;
+}

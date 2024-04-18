@@ -14,15 +14,57 @@
       <li><a href="/train">Entrenar</a></li>
   </header>
   <main>
-    <p>Acá puede volver a entrenar el modelo en base a nuevos datos</p>
+    <p class="descripcion">Acá puede volver a entrenar el modelo en base a nuevos datos. Por favor recuerde que el
+      formato del archivo debe ser `.csv` y que las dos columncls_as deben ser "Review" y "Class". Tenga en cuenta que las
+      mayúsculas en este caso son importantes.</p>
     <form action="/retrain" method="POST" enctype="multipart/form-data">
       <label for="train_data">Datos de entrenamiento:</label>
       <input type="file" id="train_data" name="train_data">
       <input type="submit" value="Entrenar">
     </form>
+
+
     {% if model_results %}
     <div class="results">
-      <p>{{ model_results }}</p>
+      {% if stats %}
+      <div class="div1">
+        <p class="explanation" style="font-style: italic;">Cuando hablamos de precisión y sensibilidad en un modelo de machine learning, nos referimos a dos maneras diferentes de medir qué tan bien funciona. La precisión nos dice cuántas predicciones acertadas hace nuestro modelo entre todas las predicciones que realiza. Por otro lado, la sensibilidad nos indica qué tan bueno es nuestro modelo para detectar casos positivos entre todos los casos positivos reales que existen. En pocas palabras, la precisión nos dice qué tan exacto es nuestro modelo en general, mientras que la sensibilidad nos dice qué tan sensible es para encontrar los casos importantes que queremos detectar.
+        </p>
+        <p>La precisión del modelo es de: {{stats.test_accuray }}</p>
+        <p>La sensibilidad (recall) del modelo es de: {{stats.test_accuray }}</p>
+      </div>
+      {% endif %}
+      <div class="div2 words-div">
+        <p class="words"> Las palabras de la calificación <span class="cls-num cls_1">1</span> son:
+        {{ model_results.class_0}}
+        </p>
+      </div>
+      <div class="div3 words-div">
+        <p class="words"> Las palabras de la calificación <span class="cls-num cls_2">2</span> son:
+        {{ model_results.class_1}}
+        </p>
+      </div>
+      <div class="div4 words-div">
+        <p class="words"> Las palabras de la calificación <span class="cls-num cls_3">3</span> son:
+        {{ model_results.class_2}}
+        </p>
+      </div>
+      <div class="div5 words-div">
+        <p class="words"> Las palabras de la calificación <span class="cls-num cls_4">4</span> son:
+        {{ model_results.class_3}}
+        </p>
+      </div>
+      <div class="div6 words-div">
+        <p class="words"> Las palabras de la calificación <span class="cls-num cls_5">5</span> son:
+        {{ model_results.class_4}}
+        </p>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <div class="error">
+      <p>{{ error }}</p>
     </div>
     {% endif %}
   </main>
