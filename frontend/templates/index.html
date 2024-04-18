@@ -12,19 +12,44 @@
         <li><a href="/train">Entrenar</a></li>
     </header>
     <main>
-      <p>DESCRIPCION</p>
+      <p class="descripcion">Por favor, ingresa una reseña para ser evaluada. 
+        Obtendrás como resultado todas las posibles calificaciones asociadas a la reseña. Asimismo, se resaltara la más probable</p>
       <form action="/predict" method="POST" enctype="multipart/form-data">
         <label for="review">Reseña:</label>
-        <textarea id="review" name="review" rows="10" cols="50"></textarea>
+        <textarea id="review" name="review" rows="200" cols="50" placeholder="Ingresa tu reseña aquí..." style="resize: vertical;"></textarea>
         <br>
-        <input type="submit" value="Predecir">
+        <input type="submit" value="Evaluar">
 
-        {% if prediction%}
+        {% if prediction %}
         <div class="prediction">
           {% if review %}
-            <p>Reseña: <q>{{ review }}</q></p>
+          <p>Reseña: <q>{{ review }}</q></p>
           {% endif %}
-          <p>Esta reseña corresponde a una clasificación de: {{ prediction }}</p>
+          <p>Calificación Reseña:</p>
+          <table>
+            <tr>
+              {% for i in range(1, num_classes+1) %}
+                {% if i == predicted_class %}
+                  <th class="prediction-cell">{{ classes[i-1] }}</th>
+                {% else %}
+                  <th>{{ classes[i-1] }}</th>
+                {% endif %}
+              {% endfor %}
+            </tr>
+            <tr>
+              {% set index = 1 %}
+              {% for pred in prediction %}
+                {% if loop.index == predicted_class %}
+                  <td class="prediction-cell">
+                {% else %}
+                  <td>
+                {% endif %}
+                  <p>{{ pred }}%</p>
+                </td>
+                {% set index = index + 1 %}
+              {% endfor %}
+            </tr>
+          </table>
         </div>
         {% endif %}
       </form>

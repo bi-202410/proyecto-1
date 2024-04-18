@@ -45,11 +45,8 @@ class Model:
             try:
                 probs = self.model.predict_proba([review])
                 prediction = [list(prob) for prob in probs]
-                #print sum
-                print(np.sum(probs))
                 prediction_result = PredictionResult(review=review, prediction=prediction)
-                predictions.append(prediction_result)
             except Exception as e:
                 print(f"[ERROR] Error while making predictions: {e}")
                 raise e
-        return predictions
+        return prediction_result

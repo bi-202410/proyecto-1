@@ -26,11 +26,18 @@ def predict():
     endpoint = f'{BACKEND_URL}/predict'
     response = requests.post(endpoint, json=[{'review': review}])
     prediction = response.json()
-    review = prediction[0]['review']
-    pred_num = prediction[0]['prediction']
-
-    return render_template('index.html', prediction=pred_num, review=review)
-
+    review = prediction['review']
+    pred_num = prediction['prediction'][0]
+    pred_num = [round(num * 100, 0) for num in pred_num]
+    num_classes = len(pred_num)
+    predicted_class = pred_num.index(max(pred_num)) + 1
+    classes = ['Muy Negativa', 'Negativa', 'Neutra', 'Positiva', 'Muy Positiva']
+    return render_template('index.html',
+                           prediction=pred_num,
+                           review=review,
+                           num_classes=num_classes,
+                           predicted_class = predicted_class,
+                           classes = classes)
 
 @app.route('/train')
 def train():
@@ -45,15 +52,13 @@ def retrain():
     file = request.files['train_data']
     if file.filename == '':
         return 'No selected file'
-    
     if not allowed_file(file.filename):
         return 'Invalid file type'
-    
 
     file_df = pd.read_csv(file, encoding='latin1')
-    file_df.rename(columns={'class': 'class_'}, inplace=True)
+    file_df.rename(columns={'Class': 'class_', 'Review': 'review'}, inplace=True)
     payload = file_df.to_dict(orient='records')
-
+    print(payload)
     response = requests.post(endpoint, json=payload)
 
     # Parse the prediction from the API response
