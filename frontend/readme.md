@@ -2,7 +2,7 @@
 
 # Automaización del Modelo - Aplicación Web
 
-> ⚠️ Asegurese que esta dentro de la carpeta de frontend/ del proyecto.
+> ⚠️ Asegurese que esta dentro de la carpeta de `frontend/` del proyecto.
 
 ## Instalación
 
