@@ -11,8 +11,8 @@
 
 ## Etapa 2
 ### Entregables
-* [Documento]()
-* [Video]()
+* [Documento](https://github.com/bi-202410/proyecto-1/blob/main/proyecto_1.2.pdf)
+* [Video](https://drive.google.com/file/d/1yR6qOQtJ1DpVHt_fEI7t-F0fNyak96Lj/view?usp=sharing)
 * [Datos de entendimiento y prueba](https://github.com/bi-202410/proyecto-1/blob/main/data/prep_tipo1_entrenamiento_estudiantes.csv)
 * [Notebook para la construcción del pipeline](https://github.com/bi-202410/proyecto-1/blob/main/backend/pipeline.ipynb)
   * [Pipeline (formato .joblib)](https://github.com/bi-202410/proyecto-1/blob/main/backend/assets/pipeline.joblib)
