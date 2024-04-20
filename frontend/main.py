@@ -25,7 +25,7 @@ def predict():
     review = request.form['review']
     endpoint = f'{BACKEND_URL}/predict'
     response = requests.post(endpoint, json=[{'review': review}])
-    prediction = response.json()
+    prediction = response.json()[0]
     review = prediction['review']
     pred_num = prediction['prediction'][0]
     pred_num = [round(num * 100, 0) for num in pred_num]

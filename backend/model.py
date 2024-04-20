@@ -46,7 +46,8 @@ class Model:
                 probs = self.model.predict_proba([review])
                 prediction = [list(prob) for prob in probs]
                 prediction_result = PredictionResult(review=review, prediction=prediction)
+                predictions.append(prediction_result)
             except Exception as e:
                 print(f"[ERROR] Error while making predictions: {e}")
                 raise e
-        return prediction_result
+        return predictions
